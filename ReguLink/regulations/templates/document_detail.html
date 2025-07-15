@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ document.title }}</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        a { color: #3366cc; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>{{ document.title }}</h1>
+    <p><strong>Type:</strong> {{ document.get_document_type_display }}</p>
+    <p><strong>Regulatory Body:</strong> {{ document.regulatory_body.name }}</p>
+    <p><strong>Published:</strong> {{ document.published_date }}</p>
+    <p>{{ document.description }}</p>
+    <p><a href="{{ document.upload.url }}">Download Document</a></p>
+    <p><a href="{% url 'document_list' %}">&larr; Back to list</a></p>
+</body>
+</html>

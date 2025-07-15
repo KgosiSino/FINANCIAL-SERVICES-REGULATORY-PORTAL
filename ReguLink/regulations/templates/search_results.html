@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .doc { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; }
+        a { text-decoration: none; color: #3366cc; }
+    </style>
+</head>
+<body>
+    <h1>Search Results for "{{ query }}"</h1>
+    <form action="{% url 'search_documents' %}" method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search documents...">
+        <button type="submit">Search</button>
+    </form>
+    <hr>
+    {% for doc in documents %}
+        <div class="doc">
+            <h2><a href="{% url 'document_detail' doc.pk %}">{{ doc.title }}</a></h2>
+            <p>Type: {{ doc.get_document_type_display }} | Authority: {{ doc.regulatory_body.name }}</p>
+            <p>Published: {{ doc.published_date }}</p>
+            <a href="{{ doc.upload.url }}">Download</a>
+        </div>
+    {% empty %}
+        <p>No documents found for your search.</p>
+    {% endfor %}
+    <p><a href="{% url 'document_list' %}">&larr; Back to all documents</a></p>
+</body>
+</html>

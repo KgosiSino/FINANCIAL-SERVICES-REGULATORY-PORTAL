@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Regulatory Documents</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .doc { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; }
+        a { text-decoration: none; color: #3366cc; }
+    </style>
+</head>
+<body>
+    <h1>All Regulatory Documents</h1>
+    <!-- <form method="get">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search title...">
+
+        <select name="body">
+            <option value="all">All Authorities</option>
+            {% for body in bodies %}
+                <option value="{{ body.id }}"
+                    {% if selected_body == body.id|stringformat:"s" %}selected{% endif %}>
+                    {{ body.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="type">
+            <option value="all">All Types</option>
+            {% for key, value in documents.model.DOCUMENT_TYPES %}
+                <option value="{{ key }}"
+                    {% if selected_type == key %}selected{% endif %}>
+                    {{ value }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form> -->
+
+
+
+    <form method="get">
+    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search title...">
+    <select name="body">
+        <option value="all">All Authorities</option>
+        {% for body in bodies %}
+            <option value="{{ body.id }}"
+                {% if selected_body == body.id|stringformat:"s" %}selected{% endif %}>
+                {{ body.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="type">
+        <option value="all">All Types</option>
+        {% for key, value in documents.model.DOCUMENT_TYPES %}
+            <option value="{{ key }}"
+                {% if selected_type == key %}selected{% endif %}>
+                {{ value }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<form method="get" action="{% url 'generate_checklist' %}">
+    <input type="hidden" name="q" value="{{ request.GET.q }}">
+    <input type="hidden" name="body" value="{{ selected_body }}">
+    <input type="hidden" name="type" value="{{ selected_type }}">
+    <button type="submit">Download Checklist PDF</button>
+</form>
+
+    <hr>
+
+    {% for doc in documents %}
+        <div class="doc">
+            <h2><a href="{% url 'document_detail' doc.pk %}">{{ doc.title }}</a></h2>
+            <p>Type: {{ doc.get_document_type_display }} | Authority: {{ doc.regulatory_body.name }}</p>
+            <p>Published: {{ doc.published_date }}</p>
+            <a href="{{ doc.upload.url }}">Download</a>
+        </div>
+    {% empty %}
+        <p>No documents found.</p>
+    {% endfor %}
+</body>
+</html>
